@@ -258,6 +258,23 @@ export default [
     ],
   },
   {
+    path: '/gallery',
+    name: 'gallery',
+    icon: 'picture',
+    routes: [
+      {
+        path: '/gallery',
+        redirect: '/gallery/list',
+      },
+      {
+        name: 'list',
+        icon: 'smile',
+        path: '/gallery/list',
+        component: './gallery/list',
+      },
+    ],
+  },
+  {
     path: '/',
     redirect: '/dashboard/analysis',
   },

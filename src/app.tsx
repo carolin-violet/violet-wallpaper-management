@@ -16,9 +16,10 @@ import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 import '@ant-design/v5-patch-for-react-19';
 
-const isDev =
-  process.env.NODE_ENV === 'development' || process.env.CI;
+const isDev = process.env.NODE_ENV === 'development' || process.env.CI;
 const loginPath = '/user/login';
+// 登录校验开关：设置为 true 时关闭登录校验
+const DISABLE_AUTH_CHECK = process.env.DISABLE_AUTH_CHECK === 'true';
 
 /**
  * @see https://umijs.org/docs/api/runtime-config#getinitialstate
@@ -30,16 +31,58 @@ export async function getInitialState(): Promise<{
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
+    // 如果关闭了登录校验，返回模拟用户信息
+    if (DISABLE_AUTH_CHECK) {
+      return {
+        name: '开发用户',
+        avatar:
+          'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+        userid: 'dev-user',
+        email: 'dev@example.com',
+        signature: '开发模式',
+        title: '开发者',
+        group: '开发组',
+        tags: [],
+        notifyCount: 0,
+        unreadCount: 0,
+        access: 'admin',
+      } as API.CurrentUser;
+    }
     try {
       const msg = await queryCurrentUser({
         skipErrorHandler: true,
       });
-      return msg.data;
+      return msg;
     } catch (_error) {
-      history.push(loginPath);
+      if (!DISABLE_AUTH_CHECK) {
+        history.push(loginPath);
+      }
     }
     return undefined;
   };
+  // 如果关闭了登录校验，直接返回模拟用户信息
+  if (DISABLE_AUTH_CHECK) {
+    const mockUser: API.CurrentUser = {
+      name: '开发用户',
+      avatar:
+        'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+      userid: 'dev-user',
+      email: 'dev@example.com',
+      signature: '开发模式',
+      title: '开发者',
+      group: '开发组',
+      tags: [],
+      notifyCount: 0,
+      unreadCount: 0,
+      access: 'admin',
+    };
+    return {
+      fetchUserInfo,
+      currentUser: mockUser,
+      settings: defaultSettings as Partial<LayoutSettings>,
+    };
+  }
+
   // 如果不是登录页面，执行
   const { location } = history;
   if (
@@ -83,6 +126,10 @@ export const layout: RunTimeLayoutConfig = ({
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
+      // 如果关闭了登录校验，跳过重定向
+      if (DISABLE_AUTH_CHECK) {
+        return;
+      }
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
@@ -151,6 +198,7 @@ export const layout: RunTimeLayoutConfig = ({
  * @doc https://umijs.org/docs/max/request#配置
  */
 export const request: RequestConfig = {
-  baseURL: 'https://proapi.azurewebsites.net',
+  // 开发环境不设置 baseURL，使用代理配置
+  // baseURL: 'https://proapi.azurewebsites.net',
   ...errorConfig,
 };
