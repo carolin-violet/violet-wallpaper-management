@@ -49,6 +49,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
         category: current.category,
         tags: current.tags?.join(',') || '',
         status: (current as any).status,
+        is_featured: current.is_featured,
       });
     }
   }, [open, current, form]);
@@ -69,6 +70,8 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
         category: values.category || null,
         tags: tags.length > 0 ? tags : null,
         status: values.status !== undefined ? values.status : null,
+        is_featured:
+          values.is_featured !== undefined ? values.is_featured : null,
       },
     );
 
@@ -79,6 +82,11 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
     { label: '未审核', value: 0 },
     { label: '通过', value: 1 },
     { label: '未通过', value: 2 },
+  ];
+
+  const featuredOptions = [
+    { label: '否', value: 0 },
+    { label: '是', value: 1 },
   ];
 
   return (
@@ -112,6 +120,13 @@ const UpdateForm: React.FC<UpdateFormProps> = ({
         label="状态"
         options={statusOptions}
         placeholder="请选择状态"
+      />
+
+      <ProFormSelect
+        name="is_featured"
+        label="精选"
+        options={featuredOptions}
+        placeholder="请选择"
       />
     </ModalForm>
   );

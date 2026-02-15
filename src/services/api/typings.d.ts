@@ -3,7 +3,7 @@ declare namespace API {
     /** File 壁纸文件 */
     file: string;
     /** Tags 标签 */
-    tags: string[];
+    tags?: string[];
     /** Category 分类 */
     category: string;
   };
@@ -16,33 +16,15 @@ declare namespace API {
     picture_id: number;
   };
 
-  type DictionaryQueryResponse = {
-    /** Records 字典列表 */
-    records: DictionaryResponse[];
-    /** Total 总记录数 */
-    total: number;
-  };
-
-  type DictionaryResponse = {
-    /** Id 主键 */
-    id: number;
-    /** Name Cn 中文名称 */
-    name_cn: string;
-    /** Name En 英文名称 */
-    name_en?: string | null;
-    /** Parent Id 父级ID，用于构建树形结构 */
-    parent_id?: number | null;
-    /** Code 编码，唯一标识 */
-    code: string;
-    /** Type 字典类型：0（分类）、1（标签） */
-    type?: number | null;
-    /** Created At 创建时间 */
-    created_at: string;
-    /** Updated At 更新时间 */
-    updated_at: string;
-  };
-
   type downloadPictureApiPicturesPictureIdDownloadGetParams = {
+    picture_id: number;
+  };
+
+  type getAllDictionariesApiDictionariesGetParams = {
+    type?: number | null;
+  };
+
+  type getPictureApiPicturesPictureIdGetParams = {
     picture_id: number;
   };
 
@@ -81,6 +63,8 @@ declare namespace API {
     device_type?: number | null;
     /** 审核状态：0=未审核，1=通过，2=未通过 */
     status?: number | null;
+    /** 是否精选：0=否，1=是 */
+    is_featured?: number | null;
     /** 分类 */
     category?: string | null;
     /** 标签列表 */
@@ -125,11 +109,17 @@ declare namespace API {
     created_at: string;
     /** Updated At 更新时间 */
     updated_at: string;
+    /** Status 审核状态：0=未审核，1=通过，2=未通过 */
+    status: number;
+    /** Is Featured 是否精选：0=否，1=是 */
+    is_featured?: number;
   };
 
   type PictureUpdateRequest = {
     /** Status 审核状态：0=未审核，1=通过，2=未通过 */
     status?: number | null;
+    /** Is Featured 是否精选：0=否，1=是 */
+    is_featured?: number | null;
     /** Category 分类 */
     category?: string | null;
     /** Tags 标签列表 */
@@ -173,6 +163,8 @@ declare namespace API {
     device_type?: number | null;
     /** Status 审核状态：0=未审核，1=通过，2=未通过 */
     status?: number;
+    /** Is Featured 是否精选：0=否，1=是 */
+    is_featured?: number;
     /** Category 分类 */
     category?: string | null;
     /** View Count 预览次数 */

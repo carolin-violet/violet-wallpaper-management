@@ -160,6 +160,26 @@ const PictureList: React.FC = () => {
       },
     },
     {
+      title: '精选',
+      dataIndex: 'is_featured',
+      width: 100,
+      valueType: 'select',
+      fieldProps: {
+        options: [
+          { label: '否', value: 0 },
+          { label: '是', value: 1 },
+        ],
+        placeholder: '请选择',
+        allowClear: true,
+      },
+      render: (_, record) => {
+        if (record.is_featured === 1) {
+          return <Tag color="gold">是</Tag>;
+        }
+        return <Tag>否</Tag>;
+      },
+    },
+    {
       title: '预览次数',
       dataIndex: 'view_count',
       width: 100,
@@ -244,6 +264,10 @@ const PictureList: React.FC = () => {
                 params.device_type !== undefined
                   ? (params.device_type as number)
                   : undefined,
+              is_featured:
+                params.is_featured !== undefined
+                  ? (params.is_featured as number)
+                  : undefined,
             });
             return {
               data: response.records || [],
@@ -259,7 +283,7 @@ const PictureList: React.FC = () => {
           }
         }}
         columns={columns}
-        scroll={{ x: 1400 }}
+        scroll={{ x: 1500 }}
       />
       <UpdateForm
         open={updateModalVisible}

@@ -23,11 +23,6 @@ export async function uploadWallpaperApiPicturesPost(
   }
 
   Object.keys(body).forEach((ele) => {
-    // 跳过 file 字段，因为文件已经通过第二个参数添加
-    if (ele === "file") {
-      return;
-    }
-
     const item = (body as any)[ele];
 
     if (item !== undefined && item !== null) {
@@ -50,6 +45,20 @@ export async function uploadWallpaperApiPicturesPost(
     method: "POST",
     data: formData,
     requestType: "form",
+    ...(options || {}),
+  });
+}
+
+/** 查询单个图片详情 根据图片ID查询单个图片的所有信息。 GET /api/pictures/${param0} */
+export async function getPictureApiPicturesPictureIdGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getPictureApiPicturesPictureIdGetParams,
+  options?: { [key: string]: any }
+) {
+  const { picture_id: param0, ...queryParams } = params;
+  return request<API.PictureUploadResponse>(`/api/pictures/${param0}`, {
+    method: "GET",
+    params: { ...queryParams },
     ...(options || {}),
   });
 }

@@ -4,8 +4,8 @@
 // API 唯一标识：
 import * as dictionaries from "./dictionaries";
 import * as pictures from "./pictures";
-import * as tags from "./tags";
 import * as rootGet from "./rootGet";
+import * as tags from "./tags";
 export default {
   dictionaries,
   pictures,

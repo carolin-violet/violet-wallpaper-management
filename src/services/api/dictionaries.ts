@@ -3,11 +3,16 @@
 import { request } from "@umijs/max";
 
 /** 查询整个字典表 查询整个字典表，返回所有数据（不分页）。 GET /api/dictionaries/ */
-export async function getAllDictionariesApiDictionariesGet(options?: {
-  [key: string]: any;
-}) {
-  return request<API.DictionaryQueryResponse>("/api/dictionaries/", {
+export async function getAllDictionariesApiDictionariesGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getAllDictionariesApiDictionariesGetParams,
+  options?: { [key: string]: any }
+) {
+  return request<any>("/api/dictionaries/", {
     method: "GET",
+    params: {
+      ...params,
+    },
     ...(options || {}),
   });
 }
